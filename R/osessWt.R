@@ -1,4 +1,20 @@
-maxess.wt.2ipd <- function (ipd1, ipd2) 
+#' @titile Optimal Standardization for two IPD's
+#'
+#' @param ipd1 a dataframe with n row and p column, where n is number of subjects and p is the number of variables used in matching.
+#' @param ipd2 the other IPD with the same number of columns
+#' @param catigorical.var a list of variable names for the categorical variables in the data
+#'
+#' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}$, then \code{categorical.var} should be left as NULL.
+#' 
+#' @return
+#' \item{osess.wt }{weights of optimal standardization by maximizing ESS. Scaled to .......}
+#' \item{ipd.ess }{effective sample size. It is no smaller than the ESS given by the MAIC weights.}
+#' \item{ipd.wtsumm}{weighted summary statistics of the matching variables after matching. they should be identical to the input AD when AD is within the IPD convex hull.}
+#' 
+#' @export osessWt
+#'
+#' @examples
+osessWt <- function (ipd1, ipd2, catigorical.var = NULL) 
 {
   ipd <- as.data.frame(rbind(-1 * ipd1, ipd2))
   oneszeros <- c(rep(1, nrow(ipd1)), rep(0, nrow(ipd2)))
@@ -63,7 +79,7 @@ maxess.wt.2ipd <- function (ipd1, ipd2)
   ipd.2.wt.mean <- colMeans(ipd2 * ipd.2.wts) ## * nrow(ipd2)
   ##ipd.2.wt.rs.mean <- colMeans(ipd2 * ipd.2.wts.rs)
   ##
-  return(list(maxess.wt = ipd.wts.me, 
+  return(list(osess.wt = ipd.wts.me, 
               ipd.ess = ipd.ess.me, 
               ipd.wt.mean = ipd.wt.mean.me,
               ipd.1.wts = ipd.1.wts,
