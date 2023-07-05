@@ -8,7 +8,7 @@ Authors@R:
       person("Ekkehard", "Glimm", role = c("aut"))) 
 Maintainer: Lillian Yau <maicChecks@gmail.com>
 Description: The initial version (0.1.2) contains a collection of easy-to-implement tools for checking whether a MAIC can be conducted. An alternative way of calculating weights is also included. These methods are introduced in Glimm & Yau (2021) <doi:10.1002/pst.2210>. The second version (0.2.0) adds an optimal standardisation as an alternative to propensity score matching method.
-VignetteBuilder: knitr
+VignetteBuilder: rmarkdown
 Depends: R (>= 3.5.0)
 Imports: data.table, tidyr, ggplot2, lpSolve, quadprog
 Suggests: knitr, rmarkdown
