@@ -3,7 +3,8 @@
 #' @param ipd1 a dataframe with n row and p column, where n is number of subjects and p is the number of variables used in matching.
 #' @param ipd2 the other IPD with the same number of columns
 #' @param catigorical.var a list of variable names for the categorical variables in the data
-#'
+#' @param mean.constraint whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
+#' 
 #' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}$, then \code{categorical.var} should be left as NULL.
 #' 
 #' @return

@@ -2,6 +2,7 @@
 #'
 #' @param ipd1 a dataframe with n1 row and p column, where n1 is number of subjects of the first IPD, and p is the number of variables used in standardization.
 #' @param ipd2 a dataframe with n2 row and p column, where n2 is number of subjects of the second IPD, and p is the number of variables used in standardization.
+#' @param catigorical.var a list of variable names for the categorical variables in the data
 #' @param mean.constraint whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
 #'
 #' @return \item{lp.check}{0 = OS can be conducted; 2 = OS cannot be conducted}
@@ -9,7 +10,7 @@
 #'
 #' @author Lillian Yau
 ## osLP(ipd1, ipd2) ## this would be the example, but ipd1 and ipd2 are not in the package yet
-osLP.2ipd <- function (ipd1, ipd2, mean.constraint = FALSE)
+osLP.2ipd <- function (ipd1, ipd2, mean.constraint = FALSE, catigorical.var = NULL)
 {
   ipd <- as.data.frame(rbind(-1 * ipd1, ipd2))
   oneszeros <- c(rep(1, nrow(ipd1)), rep(0, nrow(ipd2)))
