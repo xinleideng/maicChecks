@@ -28,8 +28,8 @@ maicLP <- function(ipd, ad) {
   ## constrain the sum of the weights to 1
   ones  <- rep(1, nrow(ipd))
   ipd   <- data.frame(cbind(ipd, ones))
+  p     <- ncol(ad) ## p = number of variables to match
   ad    <- data.frame(c(ad, 1))
-  p     <- ncol(ad)
   ## the ipd serve as the constraint
   f.con <- as.matrix(t(ipd))
   ## a dummy object to be optimized
@@ -37,9 +37,13 @@ maicLP <- function(ipd, ad) {
   ## the right hand side is ad
   f.rhs <- ad
   ## direction of constraint
-  f.dir <- rep("=", p)
+  f.dir <- rep("=", p+1)
   ## solve
-  lp.check <- lpSolve::lp ("max", f.obj, f.con, f.dir, f.rhs)$status
+  lp.check <- lpSolve::lp (direction = "max", 
+                           objective.in = f.obj, 
+                           const.mat = f.con, 
+                           const.dir = f.dir, 
+                           const.rhs = f.rhs)$status
   ##
   return(list(lp.check = lp.check))
 }
