@@ -4,12 +4,16 @@ author: "Lillian Yau"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
+  %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{maicChecks intro}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  %\usepackage[UTF-8]{inputenc}
 ---
 
 ```{r setup, include = FALSE}
+# %\VignetteIndexEntry{maicChecks intro}
+# %\VignetteEngine{knitr::rmarkdown}
+# %\VignetteEncoding{UTF-8}
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"

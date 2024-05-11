@@ -5,7 +5,7 @@
 #' @param catigorical.var a list of variable names for the categorical variables in the data
 #' @param mean.constrained whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
 #' 
-#' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}$, then \code{categorical.var} should be left as NULL.
+#' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}, then \code{categorical.var} should be left as NULL.
 #' 
 #' @return
 # \item{osess.wt }{weights of optimal standardization by maximizing ESS. Scaled to .......}
