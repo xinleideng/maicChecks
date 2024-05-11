@@ -1,4 +1,4 @@
-#' @title Optimal Standardization for two IPD's
+#' @title Exact matching for two IPD's
 #'
 #' @param ipd1 a dataframe with n row and p column, where n is number of subjects and p is the number of variables used in matching.
 #' @param ipd2 the other IPD with the same number of columns
@@ -8,13 +8,19 @@
 #' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}$, then \code{categorical.var} should be left as NULL.
 #' 
 #' @return
-#' \item{osess.wt }{weights of optimal standardization by maximizing ESS. Scaled to .......}
-#' \item{ipd.ess }{effective sample size. It is no smaller than the ESS given by the MAIC weights.}
-#' \item{ipd.wtsumm}{weighted summary statistics of the matching variables after matching. they should be identical to the input AD when AD is within the IPD convex hull.}
+# \item{osess.wt }{weights of optimal standardization by maximizing ESS. Scaled to .......}
+# \item{ipd.ess }{effective sample size. It is no smaller than the ESS given by the MAIC weights.}
+# \item{ipd.wtsumm}{weighted summary statistics of the matching variables after matching. they should be identical to the input AD when AD is within the IPD convex hull.}
+#' \item{wt.1 }{weights of the exact matching by maximizing ESS for IPD 1}
+#' \item{ess.1 }{effective sample size for IPD 1}
+#' \item{wtd.means.1 }{weighted means of the matching variables for IPD 1. Same as wtd.means.2}
+#' \item{wt.2 }{weights of the exact matching by maximizing ESS for IPD 2}
+#' \item{ess.2 }{effective sample size for IPD 2}
+#' \item{wtd.means.2 }{weghted means of the matching bariables for IPD 2. Same as wtd.means.1}
 #' 
-#' @export osWt.2ipd
+#' @export exmWt.2ipd
 #'
-osWt.2ipd <- function (ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL) 
+exmWt.2ipd <- function (ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL) 
 {
   ipd <- as.data.frame(rbind(-1 * ipd1, ipd2))
   oneszeros <- c(rep(1, nrow(ipd1)), rep(0, nrow(ipd2)))
@@ -80,14 +86,14 @@ osWt.2ipd <- function (ipd1, ipd2, mean.constrained = FALSE, catigorical.var = N
   ipd.2.ess <- round(sum(ipd.2.wts)^2/sum(ipd.2.wts^2), 1)
   ipd.2.wt.mean <- colMeans(ipd2 * ipd.2.wts)
   ##
-  return(list(ipd.all.wt = ipd.wts.me, 
-              ipd.all.ess = ipd.ess.me, 
-              ipd.all.wt.mean = ipd.wt.mean.me,
-              ipd.1.wts = ipd.1.wts,
-              ipd.1.ess = ipd.1.ess,
-              ipd.1.wt.mean = ipd.1.wt.mean,
-              ipd.2.wts = ipd.2.wts,
-              ipd.2.ess = ipd.2.ess,
-              ipd.2.wt.mean = ipd.2.wt.mean
+  return(list(## wt.all = ipd.wts.me, ## ipd.all.wt, weights from the 2 ipd combined
+              ## ess.all = ipd.ess.me, ## ipd.all.ess, ess from the 2 ipd combined
+              ## wtd.means = ipd.wt.mean.me, ## ipd.all.wt.mean, weighted means from the 2 ipd combined
+              wt.1 = ipd.1.wts, ## ipd.1.wts, weights for ipd 1
+              ess.1 = ipd.1.ess, ## ipd.1.ess , ess from ipd 1
+              wtd.means.1 = ipd.1.wt.mean, ## ipd.1.wt.mean, weighted means from ipd 1 
+              wt.2 = ipd.2.wts, ## ipd.2.wts, weights for ipd 2 
+              ess.2 = ipd.2.ess, ## ipd.2.ess, ess for ipd 2
+              wtd.means.2 = ipd.2.wt.mean ## ipd.2.wt.mean, weighted means for ipd 2
   ))
 }

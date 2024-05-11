@@ -6,11 +6,11 @@
 #' @param mean.constrained whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
 #'
 #' @return \item{lp.check}{0 = OS can be conducted; 2 = OS cannot be conducted}
-#' @export osLP.2ipd
+#' @export exmLP.2ipd
 #'
 #' @author Lillian Yau
-## osLP(ipd1, ipd2) ## this would be the example, but ipd1 and ipd2 are not in the package yet
-osLP.2ipd <- function (ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL)
+## exmLP(ipd1, ipd2) ## this would be the example, but ipd1 and ipd2 are not in the package yet
+exmLP.2ipd <- function (ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL)
 {
   ipd <- as.data.frame(rbind(-1 * ipd1, ipd2))
   oneszeros <- c(rep(1, nrow(ipd1)), rep(0, nrow(ipd2)))
