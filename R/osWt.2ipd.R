@@ -3,7 +3,7 @@
 #' @param ipd1 a dataframe with n row and p column, where n is number of subjects and p is the number of variables used in matching.
 #' @param ipd2 the other IPD with the same number of columns
 #' @param catigorical.var a list of variable names for the categorical variables in the data
-#' @param mean.constraint whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
+#' @param mean.constrained whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
 #' 
 #' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}$, then \code{categorical.var} should be left as NULL.
 #' 
@@ -14,7 +14,7 @@
 #' 
 #' @export osWt.2ipd
 #'
-osWt.2ipd <- function (ipd1, ipd2, mean.constraint = FALSE, catigorical.var = NULL) 
+osWt.2ipd <- function (ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL) 
 {
   ipd <- as.data.frame(rbind(-1 * ipd1, ipd2))
   oneszeros <- c(rep(1, nrow(ipd1)), rep(0, nrow(ipd2)))
@@ -38,7 +38,7 @@ osWt.2ipd <- function (ipd1, ipd2, mean.constraint = FALSE, catigorical.var = NU
   ## dvec is not really needed for this purpose
   dvec <- rep(0, ipd.n)
   ##
-  if(mean.constraint){
+  if(mean.constrained){
     ## means of each variable for ipd1 and ipd2
     ipd1.bar <- colMeans(ipd1)
     ipd2.bar <- colMeans(ipd2)
@@ -57,7 +57,7 @@ osWt.2ipd <- function (ipd1, ipd2, mean.constraint = FALSE, catigorical.var = NU
   ## Dmat = Q in the (soon to be) paper
   ## dvec = b in the (soon to be) paper, which are all 0's
   ## Amat = Amat0 = A in (soon to be) paper
-  ## bvec = c in the (soon to be) paper, plus the two additional restrictions (if mean.constraint == TRUE) to ensure the weighted means are within observed means
+  ## bvec = c in the (soon to be) paper, plus the two additional restrictions (if mean.constrained == TRUE) to ensure the weighted means are within observed means
   ## meq = signs of equality/inequality, which we have p+2 equals, 
   ## ... and there is one '>=' which in the syntax do not need to be specified
   wts <- quadprog::solve.QP(Dmat = Dmat, 
