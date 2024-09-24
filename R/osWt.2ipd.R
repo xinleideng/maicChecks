@@ -80,14 +80,14 @@ osWt.2ipd <- function (ipd1, ipd2, mean.constraint = FALSE, catigorical.var = NU
   ipd.2.ess <- round(sum(ipd.2.wts)^2/sum(ipd.2.wts^2), 1)
   ipd.2.wt.mean <- colMeans(ipd2 * ipd.2.wts)
   ##
-  return(list(ipd.all.wt = ipd.wts.me, 
+  return(list(ipd.all.wts = ipd.wts.me, 
               ipd.all.ess = ipd.ess.me, 
-              ipd.all.wt.mean = ipd.wt.mean.me,
+              ipd.all.wts.mean = ipd.wt.mean.me,
               ipd.1.wts = ipd.1.wts,
               ipd.1.ess = ipd.1.ess,
-              ipd.1.wt.mean = ipd.1.wt.mean,
+              ipd.1.wts.mean = ipd.1.wt.mean,
               ipd.2.wts = ipd.2.wts,
               ipd.2.ess = ipd.2.ess,
-              ipd.2.wt.mean = ipd.2.wt.mean
+              ipd.2.wts.mean = ipd.2.wt.mean
   ))
 }
