@@ -3,7 +3,7 @@
 #' @param ipd1 a dataframe with n1 row and p column, where n1 is number of subjects of the first IPD, and p is the number of variables used in standardization.
 #' @param ipd2 a dataframe with n2 row and p column, where n2 is number of subjects of the second IPD, and p is the number of variables used in standardization.
 #' @param vars_to_match variables used for matching. if NULL, use all variables.
-#' @param cat_vars_to_01 a list of variable names for the categorical variables that need to be converted to indicator variables.
+#' @param cat_vars_to_01 variable names for the categorical variables that need to be converted to indicator variables.
 #' @param mean.constrained whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
 #'
 #' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}, then \code{cat_vars_to_01} should be left as NULL.
