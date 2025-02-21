@@ -20,7 +20,7 @@
 exmWt.2ipd <- function (ipd1, ipd2, vars_to_match = NULL, cat_vars_to_01 = NULL, mean.constrained = FALSE) 
 {
   ## check vars_to_match
-  vars_to_match <- check_data(ipd1, 
+  vars_to_match <- .check_data(ipd1, 
                               ipd2, 
                               v.ars_to_match = vars_to_match,
                               c.at_vars_to_01 = cat_vars_to_01
@@ -38,8 +38,8 @@ exmWt.2ipd <- function (ipd1, ipd2, vars_to_match = NULL, cat_vars_to_01 = NULL,
   if(!is.null(cat_vars_to_01)){
     ipd1.o <- ipd1 ## save original input data for later use
     ipd2.o <- ipd2
-    ipd1 <- cat201_minus1(ipd1.o, v.cat = cat_vars_to_01)
-    ipd2 <- cat201_minus1(ipd2.o, v.cat = cat_vars_to_01)
+    ipd1 <- .cat201_minus1(ipd1.o, v.cat = cat_vars_to_01)
+    ipd2 <- .cat201_minus1(ipd2.o, v.cat = cat_vars_to_01)
   }
   
   ##
@@ -65,8 +65,8 @@ exmWt.2ipd <- function (ipd1, ipd2, vars_to_match = NULL, cat_vars_to_01 = NULL,
   
   if (mean.constrained) { ## if constrained means == TRUE
     if(!is.null(cat_vars_to_01)){
-      ipd1 <- cat201(ipd1.o, v.cat = cat_vars_to_01)
-      ipd2 <- cat201(ipd2.o, v.cat = cat_vars_to_01)
+      ipd1 <- .cat201(ipd1.o, v.cat = cat_vars_to_01)
+      ipd2 <- .cat201(ipd2.o, v.cat = cat_vars_to_01)
     }
     ipd1.bar <- colMeans(ipd1) 
     ipd2.bar <- colMeans(ipd2)

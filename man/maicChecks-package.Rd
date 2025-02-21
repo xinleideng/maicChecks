@@ -14,6 +14,7 @@ The initial version (0.1.2) contains a collection of easy-to-implement tools for
 Authors:
 \itemize{
   \item Ekkehard Glimm
+  \item Xinlei Deng \email{xinlei.deng.apha@gmail.com} (\href{https://orcid.org/0000-0001-8129-6007}{ORCID})
 }
 
 }
