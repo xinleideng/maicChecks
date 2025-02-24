@@ -7,3 +7,10 @@
 <!-- badges: end -->
 
 `maicChecks`: Assessing the Numerical Feasibility for Conducting a Matching-Adjusted Indirect Comparison (MAIC)
+
+## Installation
+
+| Type        | Source | Command                                       |
+|-------------|--------|-----------------------------------------------|
+| Release     | CRAN   | `install.packages("beeca")`                   |
+| Development | GitHub | `remotes::install_github("openpharma/beeca")` |
