@@ -6,7 +6,8 @@
 
 <!-- badges: end -->
 
-## Details see https://clyau.github.io/maicChecks/
+## Details see 
+https://clyau.github.io/maicChecks/
 
 ## Reference
 -   [Geometric approaches to assessing the numerical feasibility for conducting matching-adjusted indirect comparisons](https://onlinelibrary.wiley.com/doi/full/10.1002/pst.2210)
