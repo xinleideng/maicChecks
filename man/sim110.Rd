@@ -3,11 +3,12 @@
 \docType{data}
 \name{sim110}
 \alias{sim110}
-\title{Simulated data used for matching}
+\title{Simulated data used for exact matching}
 \format{
 \describe{
-\item{X1-X15}{Covariates used in matching.}
+\item{X1 to X15}{Covariates used in matching}
 \item{Y}{Response variable}
+\item{study}{IPD A and IPD B}
 }
 }
 \usage{
@@ -20,6 +21,6 @@ sim110 is one of the simulated data presented in the simulation study in Glimm &
 data(sim110)
 }
 \references{
-Glimm & Yau (2021)
+Glimm & Yau (2025)
 }
 \keyword{datasets}

@@ -1,6 +1,6 @@
 Package: maicChecks
 Type: Package
-Title: Assessing the Numerical Feasibility for Conducting a Matching-Adjusted Indirect Comparison (MAIC)
+Title: Exact (Direct) Matching and Matching-Adjusted Indirect Comparison (MAIC)
 Version: 0.2.0
 Date: 2024-06-06
 Authors@R: 
@@ -13,7 +13,7 @@ Authors@R:
            comment = c(ORCID = "0000-0001-8129-6007")
            ))
 Maintainer: Lillian Yau <maicChecks@gmail.com>
-Description: The initial version (0.1.2) contains a collection of easy-to-implement tools for checking whether a MAIC can be conducted. An alternative way of calculating weights is also included. These methods are introduced in Glimm & Yau (2021) <doi:10.1002/pst.2210>. The second version (0.2.0) adds an exact matching as an alternative to propensity score matching method.
+Description: The initial version (0.1.2) contains a collection of easy-to-implement tools for checking whether a MAIC can be conducted. An alternative way of calculating weights is also included. These methods are introduced in Glimm & Yau (2021) <doi:10.1002/pst.2210>. The second version (0.2.0) adds an exact matching as an alternative to propensity score matching method as introduced in Glimm & Yau (2025).
 VignetteBuilder: knitr
 Depends: R (>= 3.5.0)
 Imports: data.table, tidyr, ggplot2, lpSolve, quadprog
@@ -24,5 +24,5 @@ Suggests:
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3
