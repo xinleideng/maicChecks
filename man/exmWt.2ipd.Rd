@@ -4,28 +4,43 @@
 \alias{exmWt.2ipd}
 \title{Exact matching for two IPD's}
 \usage{
-exmWt.2ipd(ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL)
+exmWt.2ipd(
+  ipd1,
+  ipd2,
+  vars_to_match = NULL,
+  cat_vars_to_01 = NULL,
+  mean.constrained = FALSE
+)
 }
 \arguments{
 \item{ipd1}{a dataframe with n row and p column, where n is number of subjects and p is the number of variables used in matching.}
 
 \item{ipd2}{the other IPD with the same number of columns}
 
-\item{mean.constrained}{whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.}
+\item{vars_to_match}{variables used for matching. if NULL, use all variables.}
 
-\item{catigorical.var}{a list of variable names for the categorical variables in the data}
+\item{cat_vars_to_01}{a list of variable names for the categorical variables that need to be converted to indicator variables.}
+
+\item{mean.constrained}{whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.}
 }
 \value{
-\item{wt.1 }{weights of the exact matching by maximizing ESS for IPD 1}
-\item{ess.1 }{effective sample size for IPD 1}
-\item{wtd.means.1 }{weighted means of the matching variables for IPD 1. Same as wtd.means.2}
-\item{wt.2 }{weights of the exact matching by maximizing ESS for IPD 2}
-\item{ess.2 }{effective sample size for IPD 2}
-\item{wtd.means.2 }{weghted means of the matching bariables for IPD 2. Same as wtd.means.1}
+\item{ipd1 }{re-scaled weights of the exact matching by maximizing ESS for IPD 1, and the input IPD 1 data with categorical variables converted to 0-1 indicators}
+\item{ipd2 }{re-scaled weights of the exact matching by maximizing ESS for IPD 2, and the input IPD 2 data with categorical variables converted to 0-1 indicators}
+\item{wtd.summ }{ESS for IPD 1, ESS for IPD 2, and weighted means of the matching variables}
 }
 \description{
 Exact matching for two IPD's
 }
 \details{
-If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}, then \code{categorical.var} should be left as NULL.
+If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}, then \code{cat_vars_to_01} should be left as NULL.
+}
+\examples{
+\dontrun{
+ipd1 <- sim110[sim110$study == 'IPD A',]
+ipd2 <- sim110[sim110$study == 'IPD B',]
+x <- exmWt.2ipd(ipd1, ipd2, vars_to_match = paste0('X', 1:5), cat_vars_to_01 = paste0('X', 1:3), mean.constrained = FALSE) 
+}
+}
+\author{
+Lillian Yau
 }

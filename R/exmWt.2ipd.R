@@ -2,110 +2,130 @@
 #'
 #' @param ipd1 a dataframe with n row and p column, where n is number of subjects and p is the number of variables used in matching.
 #' @param ipd2 the other IPD with the same number of columns
-#' @param catigorical.var a list of variable names for the categorical variables in the data
+#' @param vars_to_match variables used for matching. if NULL, use all variables.
+#' @param cat_vars_to_01 a list of variable names for the categorical variables that need to be converted to indicator variables.
 #' @param mean.constrained whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.
 #' 
-#' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}, then \code{categorical.var} should be left as NULL.
+#' @details If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}, then \code{cat_vars_to_01} should be left as NULL.
 #' 
 #' @return
-# \item{osess.wt }{weights of optimal standardization by maximizing ESS. Scaled to .......}
-# \item{ipd.ess }{effective sample size. It is no smaller than the ESS given by the MAIC weights.}
-# \item{ipd.wtsumm}{weighted summary statistics of the matching variables after matching. they should be identical to the input AD when AD is within the IPD convex hull.}
-#' \item{wt.1 }{weights of the exact matching by maximizing ESS for IPD 1}
-#' \item{ess.1 }{effective sample size for IPD 1}
-#' \item{wtd.means.1 }{weighted means of the matching variables for IPD 1. Same as wtd.means.2}
-#' \item{wt.2 }{weights of the exact matching by maximizing ESS for IPD 2}
-#' \item{ess.2 }{effective sample size for IPD 2}
-#' \item{wtd.means.2 }{weghted means of the matching bariables for IPD 2. Same as wtd.means.1}
+#' \item{ipd1 }{re-scaled weights of the exact matching by maximizing ESS for IPD 1, and the input IPD 1 data with categorical variables converted to 0-1 indicators}
+#' \item{ipd2 }{re-scaled weights of the exact matching by maximizing ESS for IPD 2, and the input IPD 2 data with categorical variables converted to 0-1 indicators}
+#' \item{wtd.summ }{ESS for IPD 1, ESS for IPD 2, and weighted means of the matching variables}
 #' 
 #' @export exmWt.2ipd
-#'
-exmWt.2ipd <- function (ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL) 
+#' 
+#' @author Lillian Yau
+#' 
+#' @examples 
+#' \dontrun{
+#' ipd1 <- sim110[sim110$study == 'IPD A',]
+#' ipd2 <- sim110[sim110$study == 'IPD B',]
+#' x <- exmWt.2ipd(ipd1, ipd2, vars_to_match = paste0('X', 1:5), cat_vars_to_01 = paste0('X', 1:3), mean.constrained = FALSE) 
+#' }
+
+exmWt.2ipd <- function (ipd1, ipd2, vars_to_match = NULL, cat_vars_to_01 = NULL, mean.constrained = FALSE) 
 {
+  ## check vars_to_match
+  vars_to_match <- .check_data(ipd1, 
+                              ipd2, 
+                              v.ars_to_match = vars_to_match,
+                              c.at_vars_to_01 = cat_vars_to_01
+  )
+  
+  ## keep variables not used
+  ipd1_not_used <- ipd1[!(colnames(ipd1) %in% vars_to_match)]
+  ipd2_not_used <- ipd2[!(colnames(ipd1) %in% vars_to_match)]
+  
+  ## extract only vars_to_match from both ipd's
+  ipd1 <- ipd1[vars_to_match]
+  ipd2 <- ipd2[vars_to_match]
+  
+  ## save original input data and create new ones
+  if(!is.null(cat_vars_to_01)){
+    ipd1.o <- ipd1 ## save original input data for later use
+    ipd2.o <- ipd2
+    ipd1 <- .cat201_minus1(ipd1.o, v.cat = cat_vars_to_01)
+    ipd2 <- .cat201_minus1(ipd2.o, v.cat = cat_vars_to_01)
+  }
+  
+  ##
+  ## derivation for weights calculation starts here ::::
+  ##
   ipd <- as.data.frame(rbind(-1 * ipd1, ipd2))
   oneszeros <- c(rep(1, nrow(ipd1)), rep(0, nrow(ipd2)))
   zerosones <- c(rep(0, nrow(ipd1)), rep(1, nrow(ipd2)))
   ipd <- as.data.frame(cbind(ipd, oneszeros, zerosones))
   rm(oneszeros, zerosones)
   ipd.n <- nrow(ipd)
-  p <- ncol(ipd1) ## number of matching variables
-  ##
-  ## per default no constraint on the mean
-  ## then bvec and Amat0 do not have the two last colns (see below when constrain is true)
-  ##
-  bvec <- ad0 <- matrix(c(rep(0, p), 
-                          1, 
-                          1, 
-                          rep(0, nrow(ipd))), 
-                        nrow = 1)
+  p <- ncol(ipd1)
+  bvec <- matrix(c(rep(0, p), 
+                   1, 
+                   1, 
+                   rep(0, nrow(ipd))), 
+                 nrow = 1)
+  ad0 <- bvec
   Amat <- as.matrix(ipd)
   Dmat <- diag(ipd.n)
   Amat0 <- as.matrix(data.frame(cbind(Amat, Dmat)))
-  ## dvec is not really needed for this purpose
   dvec <- rep(0, ipd.n)
-  ##
-  if(mean.constrained){
-    ## means of each variable for ipd1 and ipd2
-    ipd1.bar <- colMeans(ipd1)
+  
+  if (mean.constrained) { ## if constrained means == TRUE
+    if(!is.null(cat_vars_to_01)){
+      ipd1 <- .cat201(ipd1.o, v.cat = cat_vars_to_01)
+      ipd2 <- .cat201(ipd2.o, v.cat = cat_vars_to_01)
+    }
+    ipd1.bar <- colMeans(ipd1) 
     ipd2.bar <- colMeans(ipd2)
     x <- as.data.frame(rbind(ipd1.bar, ipd2.bar))
-    ##
     bar.min <- apply(x, 2, min)
-    bar.max <- apply(x, 2, max) 
-    bvec <- matrix(c(ad0, 2 * bar.min, 2 * bar.max * (-1)), nrow = 1)
-    rm(ipd1.bar, ipd2.bar, x, bar.min, bar.max)
-    ## ipd blocks
+    bar.max <- apply(x, 2, max)
+    bvec <- matrix(c(ad0, 2 * bar.min, 2 * bar.max * (-1)), 
+                   nrow = 1)
     x0 <- as.data.frame(rbind(ipd1, ipd2))
     x1 <- as.data.frame(rbind(-1 * ipd1, -1 * ipd2))
     Amat0 <- as.matrix(data.frame(cbind(Amat, Dmat, x0, x1)))
-    rm(x0, x1)
-  } 
-  ## Dmat = Q in the (soon to be) paper
-  ## dvec = b in the (soon to be) paper, which are all 0's
-  ## Amat = Amat0 = A in (soon to be) paper
-  ## bvec = c in the (soon to be) paper, plus the two additional restrictions (if mean.constrained == TRUE) to ensure the weighted means are within observed means
-  ## meq = signs of equality/inequality, which we have p+2 equals, 
-  ## ... and there is one '>=' which in the syntax do not need to be specified
-  wts <- quadprog::solve.QP(Dmat = Dmat, 
-                            dvec = dvec, 
-                            Amat = Amat0, 
-                            bvec = bvec, 
-                            meq = p+2)
-  ## all weights
-  ipd.wts.me <- wts[["solution"]]
-  ipd.ess.me <- round(sum(ipd.wts.me)^2/sum(ipd.wts.me^2), 1)
-  ipd.wt.mean.me <- colMeans(ipd[, 1:p] * ipd.wts.me)
-  ## weights etc. for ipd1
-  ipd.1.wts <- ipd.wts.me[1 : nrow(ipd1)]
-  ipd.1.wts <- ipd.1.wts * nrow(ipd1)
-  ipd.1.ess <- round(sum(ipd.1.wts)^2/sum(ipd.1.wts^2), 1)
-  ipd.1.wt.mean <- colMeans(ipd1 * ipd.1.wts)
-  ## weights etc. for ipd2
-  ipd.2.wts <- ipd.wts.me[(1 + nrow(ipd1)) : (nrow(ipd1) + nrow(ipd2))]
-  ipd.2.wts <- ipd.2.wts * nrow(ipd2) 
-  ipd.2.ess <- round(sum(ipd.2.wts)^2/sum(ipd.2.wts^2), 1)
-  ipd.2.wt.mean <- colMeans(ipd2 * ipd.2.wts)
+  }
   ##
-##<<<<<<< HEAD:R/osWt.2ipd.R
-  return(list(ipd.all.wts = ipd.wts.me, 
-              ipd.all.ess = ipd.ess.me, 
-              ipd.all.wts.mean = ipd.wt.mean.me,
-              ipd.1.wts = ipd.1.wts,
-              ipd.1.ess = ipd.1.ess,
-              ipd.1.wts.mean = ipd.1.wt.mean,
-              ipd.2.wts = ipd.2.wts,
-              ipd.2.ess = ipd.2.ess,
-              ipd.2.wts.mean = ipd.2.wt.mean
-# =======
-#   return(list(## wt.all = ipd.wts.me, ## ipd.all.wt, weights from the 2 ipd combined
-#               ## ess.all = ipd.ess.me, ## ipd.all.ess, ess from the 2 ipd combined
-#               ## wtd.means = ipd.wt.mean.me, ## ipd.all.wt.mean, weighted means from the 2 ipd combined
-#               wt.1 = ipd.1.wts, ## ipd.1.wts, weights for ipd 1
-#               ess.1 = ipd.1.ess, ## ipd.1.ess , ess from ipd 1
-#               wtd.means.1 = ipd.1.wt.mean, ## ipd.1.wt.mean, weighted means from ipd 1 
-#               wt.2 = ipd.2.wts, ## ipd.2.wts, weights for ipd 2 
-#               ess.2 = ipd.2.ess, ## ipd.2.ess, ess for ipd 2
-#               wtd.means.2 = ipd.2.wt.mean ## ipd.2.wt.mean, weighted means for ipd 2
-# >>>>>>> ee91a79fcc65741c26fab3c9af4d94368bb3048b:R/exmWt.2ipd.R
-  ))
+  wts <- quadprog::solve.QP(Dmat = Dmat, dvec = dvec, Amat = Amat0, 
+                            bvec = bvec, meq = p + 2)
+  
+  ## save results
+  ## weights
+  ipd.wts.me <- wts[["solution"]]
+  ipd.1.wts.u <- ipd.wts.me[1:nrow(ipd1)]
+  ipd.2.wts.u <- ipd.wts.me[(1 + nrow(ipd1)):(nrow(ipd1) + nrow(ipd2))]
+  
+  ## re-scale weights
+  ipd.1.wts <- ipd.1.wts.u * nrow(ipd1)
+  ipd.2.wts <- ipd.2.wts.u * nrow(ipd2)
+  
+  ## weighted covariates means, only need one since they are the same
+  ipd.wtd.mean <- colMeans(ipd1 * ipd.1.wts)
+  ##ipd2.wtd.mean <- colMeans(ipd2 * ipd.2.wts)
+  
+  ## ess
+  ipd1.ess <- round(sum(ipd.1.wts)^2/sum(ipd.1.wts^2), 1)
+  ipd2.ess <- round(sum(ipd.2.wts)^2/sum(ipd.2.wts^2), 1)
+  
+  ## combine re-scaled weights with ipd1 data
+  ipd1 <- data.frame(exm.wts = ipd.1.wts, ipd1)
+  ## combine with un-used ipd1 variables
+  if(!is.null(ipd1_not_used))
+    ipd1 <- data.frame(cbind(ipd1_not_used, ipd1))
+  
+  ## combine re-scaled weights with ipd2 data
+  ipd2 <- data.frame(exm.wts = ipd.2.wts, ipd2)
+  ## combined with un-used ipd2 variables
+  if(!is.null(ipd2_not_used))
+    ipd2 <- data.frame(cbind(ipd2_not_used, ipd2))
+  
+  ## summary (weighted means) and ess
+  wtd.summ <- rbind(c(ipd1.ess = ipd1.ess, 
+                      ipd2.ess = ipd2.ess, 
+                      ipd.wtd.mean))
+
+  return(list(ipd1 = ipd1,
+              ipd2 = ipd2,
+              wtd.summ = wtd.summ))
 }

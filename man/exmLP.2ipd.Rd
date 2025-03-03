@@ -4,22 +4,40 @@
 \alias{exmLP.2ipd}
 \title{Checks whether two IPD datasets can be matched with lpSolve::lp}
 \usage{
-exmLP.2ipd(ipd1, ipd2, mean.constrained = FALSE, catigorical.var = NULL)
+exmLP.2ipd(
+  ipd1,
+  ipd2,
+  vars_to_match = NULL,
+  cat_vars_to_01 = NULL,
+  mean.constrained = FALSE
+)
 }
 \arguments{
 \item{ipd1}{a dataframe with n1 row and p column, where n1 is number of subjects of the first IPD, and p is the number of variables used in standardization.}
 
 \item{ipd2}{a dataframe with n2 row and p column, where n2 is number of subjects of the second IPD, and p is the number of variables used in standardization.}
 
-\item{mean.constrained}{whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.}
+\item{vars_to_match}{variables used for matching. if NULL, use all variables.}
 
-\item{catigorical.var}{a list of variable names for the categorical variables in the data}
+\item{cat_vars_to_01}{variable names for the categorical variables that need to be converted to indicator variables.}
+
+\item{mean.constrained}{whether to restrict the weighted means to be within the ranges of observed means. Default is FALSE. When it is TRUE, there is a higher chance of not having a solution.}
 }
 \value{
 \item{lp.check}{0 = OS can be conducted; 2 = OS cannot be conducted}
 }
 \description{
 Checks whether two IPD datasets can be matched with lpSolve::lp
+}
+\details{
+If dummy variables are already created for the categorical variables in the data set, and are present in \code{ipd1} and \code{ipd2}, then \code{cat_vars_to_01} should be left as NULL.
+}
+\examples{
+\dontrun{
+ipd1 <- sim110[sim110$study == 'IPD A',]
+ipd2 <- sim110[sim110$study == 'IPD B',]
+x <- exmLP.2ipd(ipd1, ipd2, vars_to_match = paste0('X', 1:5), cat_vars_to_01 = paste0('X', 1:3), mean.constrained = FALSE) 
+}
 }
 \author{
 Lillian Yau

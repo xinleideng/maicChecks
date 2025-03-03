@@ -4,9 +4,9 @@
 \name{maicChecks-package}
 \alias{maicChecks}
 \alias{maicChecks-package}
-\title{maicChecks: Assessing the Numerical Feasibility for Conducting a Matching-Adjusted Indirect Comparison (MAIC)}
+\title{maicChecks: Exact (Direct) Matching and Matching-Adjusted Indirect Comparison (MAIC)}
 \description{
-The initial version (0.1.2) contains a collection of easy-to-implement tools for checking whether a MAIC can be conducted. An alternative way of calculating weights is also included. These methods are introduced in Glimm & Yau (2021) \doi{10.1002/pst.2210}. The second version (0.2.0) adds an exact matching as an alternative to propensity score matching method.
+The initial version (0.1.2) contains a collection of easy-to-implement tools for checking whether a MAIC can be conducted. An alternative way of calculating weights is also included. These methods are introduced in Glimm & Yau (2021) \doi{10.1002/pst.2210}. The second version (0.2.0) adds an exact matching as an alternative to propensity score matching method as introduced in Glimm & Yau (2025).
 }
 \author{
 \strong{Maintainer}: Lillian Yau \email{maicChecks@gmail.com}
@@ -14,6 +14,7 @@ The initial version (0.1.2) contains a collection of easy-to-implement tools for
 Authors:
 \itemize{
   \item Ekkehard Glimm
+  \item Xinlei Deng \email{xinlei.deng.apha@gmail.com} (\href{https://orcid.org/0000-0001-8129-6007}{ORCID})
 }
 
 }
