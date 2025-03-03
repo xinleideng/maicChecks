@@ -4,9 +4,9 @@
 \name{maicChecks-package}
 \alias{maicChecks}
 \alias{maicChecks-package}
-\title{maicChecks: Exact (Direct) Matching and Matching-Adjusted Indirect Comparison (MAIC)}
+\title{maicChecks: Exact Matching (ExM) and Matching-Adjusted Indirect Comparison (MAIC)}
 \description{
-The initial version (0.1.2) contains a collection of easy-to-implement tools for checking whether a MAIC can be conducted. An alternative way of calculating weights is also included. These methods are introduced in Glimm & Yau (2021) \doi{10.1002/pst.2210}. The second version (0.2.0) adds an exact matching as an alternative to propensity score matching method as introduced in Glimm & Yau (2025).
+The second version (0.2.0) contains implementation for exact matching which is an alternative to propensity score matching (see Glimm & Yau (2025)). The initial version (0.1.2) contains a collection of easy-to-implement tools for checking whether a MAIC can be conducted, as well as an alternative way of calculating weights (see Glimm & Yau (2021) \doi{10.1002/pst.2210}.)
 }
 \author{
 \strong{Maintainer}: Lillian Yau \email{maicChecks@gmail.com}
