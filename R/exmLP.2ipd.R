@@ -18,7 +18,8 @@
 #' \dontrun{
 #' ipd1 <- sim110[sim110$study == 'IPD A',]
 #' ipd2 <- sim110[sim110$study == 'IPD B',]
-#' x <- exmLP.2ipd(ipd1, ipd2, vars_to_match = paste0('X', 1:5), cat_vars_to_01 = paste0('X', 1:3), mean.constrained = FALSE) 
+#' x <- exmLP.2ipd(ipd1, ipd2, vars_to_match = paste0('X', 1:5), 
+#' cat_vars_to_01 = paste0('X', 1:3), mean.constrained = FALSE) 
 #' }
 
 exmLP.2ipd <- function (ipd1, ipd2, vars_to_match = NULL, cat_vars_to_01 = NULL, mean.constrained = FALSE)
