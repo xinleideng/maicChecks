@@ -1,4 +1,4 @@
-# maicChecks <a href="https://github.com/clyau/maicChecks"><img src="https://github.com/user-attachments/assets/16780205-98c6-4bbd-af23-dfec94010d54" align="right" height="140"/></a>
+# maicChecks: an R package <a href="https://github.com/clyau/maicChecks"><img src="https://github.com/user-attachments/assets/16780205-98c6-4bbd-af23-dfec94010d54" align="right" height="140"/></a>
 
 <!-- badges: start -->
 
