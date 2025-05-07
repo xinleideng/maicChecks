@@ -2,7 +2,9 @@
 
 <!-- badges: start -->
 
-[![CRAN status](https://badges.cranchecks.info/flavor/release/maicChecks.svg)](https://cran.r-project.org/web/checks/check_results_maicChecks.html) [![downloads](https://cranlogs.r-pkg.org/badges/maicChecks)](https://www.rdocumentation.org/trends)
+[![CRAN status](https://badges.cranchecks.info/flavor/release/maicChecks.svg)](https://cran.r-project.org/web/checks/check_results_maicChecks.html) [![downloads](https://cranlogs.r-pkg.org/badges/maicChecks)](https://www.rdocumentation.org/trends) 
+
+<!-- [![downloads](https://cranlogs.r-pkg.org/badges/grand-total/maicChecks)](https://cran.r-project.org/package=maicChecks) -->
 
 <!-- badges: end -->
 
